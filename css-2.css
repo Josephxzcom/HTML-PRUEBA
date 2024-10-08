@@ -1,0 +1,134 @@
+/* Estilos generales */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f4f8;
+}
+
+/* Barra de navegación */
+.navbar {
+    background-color: #343a40; /* Color oscuro */
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+/* Contenedor principal */
+.container {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Tarjeta de información */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+.card h2 {
+    margin-top: 0;
+    color: #007bff; /* Color del título */
+}
+
+/* Estilo del mensaje de bienvenida */
+.welcome-message {
+    font-size: 1.2em;
+    color: #333;
+}
+
+/* Estilo de la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #dee2e6; /* Color del borde de la tabla */
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #007bff; /* Color del encabezado */
+    color: white;
+}
+
+.delete-btn, .clear-btn, button {
+    background-color: #28a745; /* Color verde */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover, .clear-btn:hover, button:hover {
+    background-color: #218838; /* Color verde oscuro */
+}
+
+/* Gráfico */
+#myChart {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+/* Estilo para consulta de DNI */
+.consulta-dni {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+input, button {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ced4da; /* Color del borde de los inputs */
+    margin-bottom: 15px;
+}
+
+button {
+    background-color: #007bff; /* Color azul */
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background-color: #0056b3; /* Color azul oscuro */
+}
+
+/* Resultados de la consulta */
+#result {
+    margin-top: 20px;
+}
+
+#nombreCompleto {
+    font-size: 1.2rem;
+    color: #333;
+}

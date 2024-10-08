@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intranet con Consulta de DNI</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Enlace al archivo CSS -->
+    <script src="intranet.js" defer></script> <!-- Vincula el archivo JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Vincula Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Vincula jsPDF -->
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Barra de navegación */
+        .navbar {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+
+        .navbar h1 {
+            margin: 0;
+        }
+
+        .navbar nav {
+            display: flex;
+            flex-direction: column; /* Menú en formato vertical */
+            align-items: flex-end;
+        }
+
+        .navbar nav a {
+            color: white;
+            text-decoration: none;
+            margin: 5px 0;
+        }
+
+        .navbar nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Contenedor principal */
+        .container {
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* Tarjeta de información */
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        /* Estilo del mensaje de bienvenida */
+        .welcome-message {
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        /* Estilo de la tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .clear-btn {
+            background-color: #ffcc00;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .clear-btn:hover {
+            background-color: #e6b800;
+        }
+
+        #myChart {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        /* Estilo para consulta de DNI */
+        .consulta-dni {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input, button {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+
+        #nombreCompleto {
+            font-size: 1.2rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra de navegación -->
+    <div class="navbar">
+        <h1>Intranet</h1>
+        <nav>
+            <a href="login.html.html">Cerrar Sesión</a><a href="intranet.html">&nbsp;</a>
+            <!-- Enlace a la intranet -->
+        </nav>
+    </div>
+
+    <!-- Contenedor principal -->
+    <div class="container">
+        <div class="card">
+            <h2>Bienvenido a la Intranet</h2>
+            <p class="welcome-message" id="welcome-message"></p>
+        </div>
+        <div class="card">
+            <h2>Últimas Noticias</h2>
+            <p>Revisa las últimas actualizaciones y anuncios importantes para todos los empleados.</p>
+        </div>
+        <div class="card">
+            <h2>Recursos</h2>
+            <p>Accede a documentos, formularios y otra información relevante para tu trabajo.</p>
+        </div>
+
+        <!-- Sección para consulta de DNI -->
+        <div class="consulta-dni card">
+            <h2>Consulta de DNI - RENIEC</h2>
+            <form id="dniForm">
+                <label for="dni">Ingrese DNI:</label>
+                <input type="text" id="dni" name="dni" placeholder="Número de DNI" required>
+                <button type="submit">Consultar</button>
+            </form>
+            <div id="result">
+                <h2>Resultado:</h2>
+                <p id="nombreCompleto">El nombre aparecerá aquí...</p>
+            </div>
+        </div>
+
+        <!-- Sección solo visible para administradores -->
+        <div id="admin-section" class="card" style="display:none;">
+            <h2>Registrar Pedido</h2>
+            <form id="pedidoForm">
+                <label for="product">Producto</label>
+                <input type="text" id="product" name="product" placeholder="Ingresa el producto" required>
+
+                <label for="quantity">Cantidad</label>
+                <input type="number" id="quantity" name="quantity" placeholder="Cantidad" required>
+
+                <label for="price">Precio</label>
+                <input type="number" id="price" name="price" placeholder="Precio" required step="0.01">
+
+                <button type="submit">Registrar Pedido</button>
+            </form>
+
+            <!-- Tabla de pedidos -->
+            <h3>Pedidos Registrados</h3>
+            <table id="pedidoTable">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="pedidoTableBody">
+                </tbody>
+            </table>
+
+            <!-- Botón para borrar todos los pedidos -->
+            <button class="clear-btn" id="clearAll">Borrar Todo</button>
+
+            <!-- Egresos -->
+            <h2>Registrar Egreso</h2>
+            <form id="egresoForm">
+                <label for="egreso">Egreso</label>
+                <input type="number" id="egreso" name="egreso" placeholder="Monto de egreso" required step="0.01">
+                <button type="submit">Registrar Egreso</button>
+                <button type="button" id="deleteEgreso" class="delete-btn" style="margin-left: 10px;">Eliminar Último Egreso</button>
+			</form>
+
+            <!-- Gráfico -->
+            <h3>Gráfico de Ingresos y Egresos</h3>
+            <canvas id="myChart"></canvas>
+            <button class="clear-btn" id="generateChart">Actualizar Gráfico</button>
+        </div>
+
+        <!-- Sección de Inventario -->
+        <div id="inventory-section" class="card" style="display:none;">
+            <h2>Inventario</h2>
+            <table id="inventoryTable">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody id="inventoryTableBody">
+                </tbody>
+            </table>
+
+            <!-- Formulario para vender productos -->
+            <h2>Vender Producto</h2>
+            <form id="ventaForm">
+                <label for="venta-product">Producto</label>
+                <select id="venta-product" name="venta-product" required>
+                    <option value="">Selecciona un producto</option>
+                </select>
+
+                <label for="venta-cantidad">Cantidad</label>
+                <input type="number" id="venta-cantidad" name="venta-cantidad" placeholder="Cantidad a vender" required>
+
+                <label for="buyerDNI">DNI del Comprador</label>
+                <input type="text" id="buyerDNI" name="buyerDNI" placeholder="Número de DNI del Comprador" required>
+
+                <button type="submit">Vender Producto</button>
+            </form>
+
+            <!-- Botón para generar PDF -->
+            <button id="generatePDF" class="clear-btn" style="margin-top: 20px; display: none;">Generar PDF de la Venta</button>
+        </div>
+    </div>
+
+    <script src="intranet.js" defer></script>
+</body>
+</html>
